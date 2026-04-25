@@ -1,0 +1,71 @@
+name: Site Health Check
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'   # 10분마다 자동 실행
+  workflow_dispatch:           # Actions 탭에서 수동 실행 버튼
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write          # status.json 커밋을 위한 쓰기 권한
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run health check
+        run: |
+          python3 << 'EOF'
+          import json, subprocess, time, datetime
+
+          with open('sitecheck/sites.json', encoding='utf-8') as f:
+              sites = json.load(f)['sites']
+
+          results = []
+          for site in sites:
+              try:
+                  proc = subprocess.run(
+                      [
+                          'curl', '-o', '/dev/null', '-s',
+                          '-w', '%{http_code} %{time_total}',
+                          '-L',                   # 리다이렉트 따라가기
+                          '--max-time', '15',
+                          '--connect-timeout', '10',
+                          site['url']
+                      ],
+                      capture_output=True, text=True, timeout=20
+                  )
+                  parts = proc.stdout.strip().split()
+                  status = int(parts[0]) if parts else 0
+                  ms = int(float(parts[1]) * 1000) if len(parts) > 1 else 0
+              except Exception:
+                  status = 0
+                  ms = 0
+              results.append({
+                  'name': site['name'],
+                  'url': site['url'],
+                  'status': status,
+                  'ms': ms
+              })
+
+          kst = datetime.timezone(datetime.timedelta(hours=9))
+          now = datetime.datetime.now(kst).strftime('%Y-%m-%d %H:%M KST')
+
+          output = {'updated': now, 'sites': results}
+
+          with open('sitecheck/status.json', 'w', encoding='utf-8') as f:
+              json.dump(output, f, ensure_ascii=False, indent=2)
+
+          ok = sum(1 for r in results if 200 <= r['status'] < 300)
+          print(f"완료: 총 {len(results)}개 사이트, 정상 {ok}개, 오류 {len(results)-ok}개")
+          EOF
+
+      - name: Commit and push results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sitecheck/status.json
+          git diff --staged --quiet || git commit -m "chore: update status.json [skip ci]"
+          git push
