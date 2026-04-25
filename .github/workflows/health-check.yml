@@ -74,6 +74,13 @@ jobs:
           for name in failed:
               site_counts[name] = site_counts.get(name, 0) + 1
 
+          # sites.json에서 제거된 사이트의 history 데이터 정리
+          current_names = {s['name'] for s in sites}
+          for day in days:
+              removed = [n for n in list(day.get('sites', {}).keys()) if n not in current_names]
+              for n in removed:
+                  del day['sites'][n]
+
           days.sort(key=lambda d: d['date'])
           history['days'] = days[-90:]   # 90일 초과분 자동 삭제
 
