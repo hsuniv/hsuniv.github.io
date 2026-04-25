@@ -9,7 +9,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     permissions:
-      contents: write          # status.json 커밋을 위한 쓰기 권한
+      contents: write          # status.json / history.json 커밋을 위한 쓰기 권한
 
     steps:
       - name: Checkout
@@ -30,7 +30,7 @@ jobs:
                       [
                           'curl', '-o', '/dev/null', '-s',
                           '-w', '%{http_code} %{time_total}',
-                          '-L',                   # 리다이렉트 따라가기
+                          '-L',                    # 리다이렉트 따라가기
                           '--max-time', '15',
                           '--connect-timeout', '10',
                           site['url']
@@ -39,33 +39,66 @@ jobs:
                   )
                   parts = proc.stdout.strip().split()
                   status = int(parts[0]) if parts else 0
-                  ms = int(float(parts[1]) * 1000) if len(parts) > 1 else 0
+                  ms     = int(float(parts[1]) * 1000) if len(parts) > 1 else 0
               except Exception:
                   status = 0
-                  ms = 0
+                  ms     = 0
               results.append({
                   'name': site['name'],
-                  'url': site['url'],
+                  'url':  site['url'],
                   'status': status,
-                  'ms': ms
+                  'ms':     ms
               })
 
-          kst = datetime.timezone(datetime.timedelta(hours=9))
-          now = datetime.datetime.now(kst).strftime('%Y-%m-%d %H:%M KST')
+          kst   = datetime.timezone(datetime.timedelta(hours=9))
+          now   = datetime.datetime.now(kst)
+          today = now.strftime('%Y-%m-%d')
 
-          output = {'updated': now, 'sites': results}
-
+          # status.json 저장
+          output = {'updated': now.strftime('%Y-%m-%d %H:%M KST'), 'sites': results}
           with open('sitecheck/status.json', 'w', encoding='utf-8') as f:
               json.dump(output, f, ensure_ascii=False, indent=2)
 
+          # 오늘 전체 상태 판정 (하루 중 가장 나쁜 상태를 유지)
+          STATUS_RANK = {'green': 0, 'yellow': 1, 'red': 2}
+          if any(r['status'] == 0 or r['status'] >= 500 for r in results):
+              today_status = 'red'
+          elif any(300 <= r['status'] < 500 for r in results):
+              today_status = 'yellow'
+          else:
+              today_status = 'green'
+
+          # history.json 업데이트 (최대 90일 유지)
+          try:
+              with open('sitecheck/history.json', encoding='utf-8') as f:
+                  history = json.load(f)
+          except Exception:
+              history = {'days': []}
+
+          days    = history.get('days', [])
+          existing = next((d for d in days if d['date'] == today), None)
+
+          if existing:
+              # 하루 중 더 나쁜 상태가 나오면 덮어쓴다
+              if STATUS_RANK.get(today_status, 0) > STATUS_RANK.get(existing['status'], 0):
+                  existing['status'] = today_status
+          else:
+              days.append({'date': today, 'status': today_status})
+
+          days.sort(key=lambda d: d['date'])
+          history['days'] = days[-90:]   # 90일 초과분 자동 삭제
+
+          with open('sitecheck/history.json', 'w', encoding='utf-8') as f:
+              json.dump(history, f, ensure_ascii=False, indent=2)
+
           ok = sum(1 for r in results if 200 <= r['status'] < 300)
-          print(f"완료: 총 {len(results)}개 사이트, 정상 {ok}개, 오류 {len(results)-ok}개")
+          print(f"완료: 총 {len(results)}개 사이트, 정상 {ok}개, 오류 {len(results)-ok}개 / 오늘 상태: {today_status}")
           EOF
 
       - name: Commit and push results
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add sitecheck/status.json
-          git diff --staged --quiet || git commit -m "chore: update status.json [skip ci]"
+          git add sitecheck/status.json sitecheck/history.json
+          git diff --staged --quiet || git commit -m "chore: update status [skip ci]"
           git push

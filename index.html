@@ -3,240 +3,355 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>한성대 사이트 상태 체크</title>
+  <title>한성대학교 서비스 상태</title>
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background-color: #1e1e1e;
+      background: #1e1e1e;
       color: #d4d4d4;
       font-family: "Noto Sans KR", "맑은 고딕", "Malgun Gothic", monospace, sans-serif;
       font-size: 0.95rem;
-      padding: 2rem 1rem;
+      padding: 2.5rem 1.5rem;
+      max-width: 920px;
     }
 
-    h1 {
-      color: #569CD6;
-      font-size: 1.4rem;
-      margin-bottom: 0.3rem;
-    }
+    /* ── 헤더 ───────────────────────────────── */
+    h1 { color: #569CD6; font-size: 1.5rem; margin-bottom: 0.2rem; }
+    .site-sub { color: #6A9955; font-size: 0.82rem; margin-bottom: 2rem; }
 
-    .meta {
-      color: #6A9955;
-      font-size: 0.85rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .controls {
+    /* ── 상태 배너 ──────────────────────────── */
+    .banner {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.2rem;
-      flex-wrap: wrap;
-    }
-
-    button {
-      background-color: #2d2d2d;
-      color: #569CD6;
-      border: 1px solid #569CD6;
-      padding: 0.35rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-family: inherit;
-      transition: background 0.2s;
-    }
-    button:hover { background-color: #3a3a3a; }
-
-    .auto-refresh-label {
-      color: #808080;
-      font-size: 0.83rem;
-    }
-
-    table {
-      width: 100%;
-      max-width: 860px;
-      border-collapse: collapse;
-    }
-
-    th {
-      background-color: #252526;
-      color: #D7BA7D;
-      text-align: left;
-      padding: 0.55rem 0.8rem;
-      border-bottom: 1px solid #3a3a3a;
+      gap: 0.75rem;
+      padding: 1rem 1.4rem;
+      border-radius: 6px;
+      margin-bottom: 2.5rem;
+      font-size: 1rem;
       font-weight: bold;
     }
+    .banner-green  { background: rgba(78,201,78,.1);   border-left: 4px solid #4ec94e; color: #4ec94e; }
+    .banner-yellow { background: rgba(229,192,123,.1); border-left: 4px solid #e5c07b; color: #e5c07b; }
+    .banner-red    { background: rgba(224,108,117,.1); border-left: 4px solid #e06c75; color: #e06c75; }
+    .banner-icon { font-size: 1.25rem; line-height: 1; }
 
-    td {
-      padding: 0.5rem 0.8rem;
-      border-bottom: 1px solid #2d2d2d;
+    /* ── 섹션 공통 ──────────────────────────── */
+    .section-title {
+      color: #D7BA7D;
+      font-size: 0.78rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+    .divider { border: none; border-top: 1px solid #2d2d2d; margin: 2.5rem 0; }
+
+    /* ── 90일 가동 현황 ─────────────────────── */
+    .history-section { margin-bottom: 2.5rem; }
+    .history-labels {
+      display: flex;
+      justify-content: space-between;
+      color: #4a4a4a;
+      font-size: 0.76rem;
+      margin-bottom: 0.45rem;
+    }
+    .history-wrap { overflow-x: auto; padding-bottom: 4px; }
+    .history-bars { display: flex; gap: 3px; min-width: max-content; }
+    .bar {
+      width: 8px;
+      height: 32px;
+      border-radius: 2px;
+      flex-shrink: 0;
+      cursor: default;
+      transition: opacity 0.15s;
+    }
+    .bar:hover { opacity: 0.65; }
+    .bar-green  { background: #4ec94e; }
+    .bar-yellow { background: #e5c07b; }
+    .bar-red    { background: #e06c75; }
+    .bar-none   { background: #2a2a2a; }
+    .history-legend {
+      display: flex;
+      gap: 1.2rem;
+      margin-top: 0.6rem;
+      font-size: 0.76rem;
+      color: #555;
+    }
+    .legend-dot {
+      display: inline-block;
+      width: 10px; height: 10px;
+      border-radius: 2px;
+      margin-right: 0.3rem;
       vertical-align: middle;
     }
 
-    tr:hover td { background-color: #252526; }
-
-    .status-icon {
-      font-size: 1.1rem;
-      margin-right: 0.4rem;
+    /* ── 컨트롤 / 테이블 ────────────────────── */
+    .meta { color: #6A9955; font-size: 0.82rem; margin-bottom: 0.8rem; }
+    .controls {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1.2rem; flex-wrap: wrap;
     }
+    button {
+      background: #2d2d2d; color: #569CD6;
+      border: 1px solid #569CD6; padding: 0.35rem 1rem;
+      border-radius: 4px; cursor: pointer; font-size: 0.85rem;
+      font-family: inherit; transition: background 0.2s;
+    }
+    button:hover { background: #3a3a3a; }
+    .auto-label { color: #808080; font-size: 0.83rem; }
 
+    table { width: 100%; border-collapse: collapse; margin-bottom: 0.8rem; }
+    th {
+      background: #252526; color: #D7BA7D;
+      text-align: left; padding: 0.55rem 0.8rem;
+      border-bottom: 1px solid #3a3a3a; font-weight: bold;
+    }
+    td { padding: 0.5rem 0.8rem; border-bottom: 1px solid #2d2d2d; vertical-align: middle; }
+    tr:hover td { background: #252526; }
+
+    .s-icon { font-size: 1.05rem; margin-right: 0.4rem; }
     .code-ok   { color: #4ec94e; }
     .code-warn { color: #e5c07b; }
     .code-err  { color: #e06c75; }
-
-    .url-cell a {
-      color: #569CD6;
-      text-decoration: none;
-      font-size: 0.85rem;
-    }
+    .url-cell a { color: #569CD6; text-decoration: none; font-size: 0.85rem; }
     .url-cell a:hover { text-decoration: underline; }
-
     .ms-cell { color: #808080; font-size: 0.85rem; }
 
-    #loading {
-      color: #808080;
-      margin-top: 2rem;
-      font-size: 0.9rem;
-    }
-
-    #error-msg {
-      color: #e06c75;
-      margin-top: 1rem;
-      display: none;
-    }
-
-    .summary {
-      margin-top: 1rem;
-      font-size: 0.85rem;
-      color: #808080;
-    }
+    #loading { color: #808080; margin: 1.5rem 0; font-size: 0.9rem; }
+    #error-msg { color: #e06c75; margin: 1rem 0; display: none; }
+    .summary { font-size: 0.85rem; color: #808080; margin-top: 0.4rem; }
     .summary span { color: #D7BA7D; }
+
+    /* ── 주요 이슈 기록 ─────────────────────── */
+    .incidents-section { margin-bottom: 2rem; }
+    .incident {
+      border-left: 3px solid #2d2d2d;
+      padding: 0.8rem 1.2rem;
+      margin-bottom: 1.4rem;
+    }
+    .incident-date  { color: #6A9955; font-size: 0.8rem; margin-bottom: 0.3rem; }
+    .incident-title { color: #D7BA7D; font-size: 0.95rem; font-weight: bold; margin-bottom: 0.4rem; }
+    .incident-body  { color: #808080; font-size: 0.87rem; line-height: 1.65; }
+
+    /* ── 푸터 ───────────────────────────────── */
+    footer { color: #3a3a3a; font-size: 0.78rem; margin-top: 2.5rem; }
   </style>
 </head>
 <body>
 
-  <h1>한성대 사이트 상태 체크</h1>
-  <div class="meta" id="last-updated">마지막 체크: —</div>
+  <h1>한성대학교 서비스 상태</h1>
+  <div class="site-sub">hansung.ac.kr 주요 웹서비스 모니터링</div>
 
-  <div class="controls">
-    <button onclick="loadStatus()">새로고침</button>
-    <label class="auto-refresh-label">
-      <input type="checkbox" id="auto-refresh" onchange="toggleAutoRefresh()">
-      자동 새로고침 (60초)
-    </label>
+  <!-- ① 상태 배너 -->
+  <div class="banner banner-green" id="banner">
+    <span class="banner-icon" id="banner-icon">🟢</span>
+    <span id="banner-msg">모든 시스템이 정상 운영 중입니다.</span>
   </div>
 
-  <div id="loading">불러오는 중...</div>
-  <div id="error-msg">status.json을 불러올 수 없습니다. GitHub Actions가 아직 실행 전일 수 있습니다.</div>
+  <!-- ② 90일 가동 현황 -->
+  <section class="history-section">
+    <div class="section-title">최근 90일 가동 현황</div>
+    <div class="history-labels">
+      <span>90일 전</span>
+      <span>오늘</span>
+    </div>
+    <div class="history-wrap">
+      <div class="history-bars" id="history-bars"></div>
+    </div>
+    <div class="history-legend">
+      <span><span class="legend-dot" style="background:#4ec94e"></span>정상</span>
+      <span><span class="legend-dot" style="background:#e5c07b"></span>일부 장애</span>
+      <span><span class="legend-dot" style="background:#e06c75"></span>서비스 중단</span>
+      <span><span class="legend-dot" style="background:#2a2a2a"></span>데이터 없음</span>
+    </div>
+  </section>
 
-  <table id="result-table" style="display:none;">
-    <thead>
-      <tr>
-        <th style="width:2.5rem;">#</th>
-        <th>사이트명</th>
-        <th>URL</th>
-        <th style="width:6rem;">상태코드</th>
-        <th style="width:6rem;">응답(ms)</th>
-      </tr>
-    </thead>
-    <tbody id="result-body"></tbody>
-  </table>
+  <!-- ③ 현재 사이트 상태 -->
+  <section>
+    <div class="section-title">현재 사이트 상태</div>
+    <div class="meta" id="last-updated">마지막 체크: —</div>
+    <div class="controls">
+      <button onclick="loadAll()">새로고침</button>
+      <label class="auto-label">
+        <input type="checkbox" id="auto-cb" onchange="toggleAuto()">
+        자동 새로고침 (60초)
+      </label>
+    </div>
+    <div id="loading">불러오는 중...</div>
+    <div id="error-msg">status.json을 불러올 수 없습니다. GitHub Actions가 아직 실행 전일 수 있습니다.</div>
+    <table id="result-table" style="display:none;">
+      <thead>
+        <tr>
+          <th style="width:2.5rem;">#</th>
+          <th>사이트명</th>
+          <th>URL</th>
+          <th style="width:6rem;">상태코드</th>
+          <th style="width:6rem;">응답(ms)</th>
+        </tr>
+      </thead>
+      <tbody id="result-body"></tbody>
+    </table>
+    <div class="summary" id="summary" style="display:none;"></div>
+  </section>
 
-  <div class="summary" id="summary" style="display:none;"></div>
+  <!-- ④ 주요 이슈 기록 -->
+  <div id="incidents-wrap" style="display:none;">
+    <hr class="divider">
+    <section class="incidents-section">
+      <div class="section-title">주요 이슈 기록</div>
+      <div id="incidents-list"></div>
+    </section>
+  </div>
+
+  <footer>hsuniv.github.io · IT인프라팀</footer>
 
   <script>
+    const BASE = './sitecheck/';
     let autoTimer = null;
 
-    function loadStatus() {
+    function esc(s) {
+      return String(s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function get(path) {
+      return fetch(BASE + path + '?t=' + Date.now())
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+    }
+
+    function loadAll() {
+      Promise.allSettled([
+        get('status.json'),
+        get('history.json'),
+        get('comment.json'),
+      ]).then(([sr, hr, cr]) => {
+        renderBanner (cr.status === 'fulfilled' ? cr.value : null);
+        renderHistory(hr.status === 'fulfilled' ? hr.value : null);
+        renderTable  (sr.status === 'fulfilled' ? sr.value : null);
+        renderIncidents(cr.status === 'fulfilled' ? cr.value : null);
+      });
+    }
+
+    /* ── 배너 ──────────────────────────────── */
+    function renderBanner(c) {
+      if (!c) return;
+      const defaults = {
+        green:  '모든 시스템이 정상 운영 중입니다.',
+        yellow: '일부 시스템에 장애가 발생하고 있습니다.',
+        red:    '서비스 장애가 발생하고 있습니다.',
+      };
+      const icons = { green: '🟢', yellow: '🟡', red: '🔴' };
+      const s = (c.status || 'green').toLowerCase();
+      document.getElementById('banner').className = 'banner banner-' + s;
+      document.getElementById('banner-icon').textContent = icons[s] || '🟢';
+      document.getElementById('banner-msg').textContent  =
+        (c.message && c.message.trim()) ? c.message.trim() : (defaults[s] || defaults.green);
+    }
+
+    /* ── 90일 바 ────────────────────────────── */
+    function renderHistory(h) {
+      const container = document.getElementById('history-bars');
+      const dayMap = {};
+      if (h && h.days) h.days.forEach(d => { dayMap[d.date] = d.status; });
+
+      const labels = { green:'정상', yellow:'일부 장애', red:'서비스 중단', none:'데이터 없음' };
+      let html = '';
+      for (let ago = 89; ago >= 0; ago--) {
+        const d = new Date();
+        d.setDate(d.getDate() - ago);
+        const date   = d.toISOString().slice(0, 10);
+        const status = dayMap[date] || 'none';
+        html += `<div class="bar bar-${status}" title="${date} · ${labels[status]}"></div>`;
+      }
+      container.innerHTML = html;
+    }
+
+    /* ── 사이트 테이블 ──────────────────────── */
+    function renderTable(data) {
       const loading = document.getElementById('loading');
       const errMsg  = document.getElementById('error-msg');
       const table   = document.getElementById('result-table');
       const summary = document.getElementById('summary');
 
-      loading.style.display = 'block';
-      errMsg.style.display  = 'none';
-      table.style.display   = 'none';
-      summary.style.display = 'none';
+      loading.style.display = 'none';
 
-      fetch('./sitecheck/status.json?t=' + Date.now())
-        .then(r => {
-          if (!r.ok) throw new Error('HTTP ' + r.status);
-          return r.json();
-        })
-        .then(data => {
-          loading.style.display = 'none';
-          render(data);
-        })
-        .catch(() => {
-          loading.style.display = 'none';
-          errMsg.style.display  = 'block';
-        });
-    }
+      if (!data) {
+        errMsg.style.display = 'block';
+        return;
+      }
+      errMsg.style.display = 'none';
+      document.getElementById('last-updated').textContent =
+        '마지막 체크: ' + (data.updated || '정보 없음');
 
-    function render(data) {
-      const updated = document.getElementById('last-updated');
-      const tbody   = document.getElementById('result-body');
-      const table   = document.getElementById('result-table');
-      const summary = document.getElementById('summary');
-
-      updated.textContent = '마지막 체크: ' + (data.updated || '정보 없음');
-
-      if (!data.sites || data.sites.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="color:#808080; padding:1rem;">데이터가 없습니다. GitHub Actions 실행 후 새로고침하세요.</td></tr>';
+      if (!data.sites || !data.sites.length) {
         table.style.display = 'table';
+        document.getElementById('result-body').innerHTML =
+          '<tr><td colspan="5" style="color:#808080;padding:1rem;">데이터가 없습니다.</td></tr>';
         return;
       }
 
-      let okCount = 0;
-      let rows = '';
-
+      let ok = 0, rows = '';
       data.sites.forEach((site, i) => {
         const s      = site.status;
         const isOk   = s >= 200 && s < 300;
         const isWarn = s >= 300 && s < 500;
-
-        const icon      = isOk ? '🟢' : (isWarn ? '🟡' : '🔴');
-        const codeClass = isOk ? 'code-ok' : (isWarn ? 'code-warn' : 'code-err');
-        if (isOk) okCount++;
-
-        const msText = site.ms > 0 ? site.ms + ' ms' : '—';
-
+        const icon = isOk ? '🟢' : isWarn ? '🟡' : '🔴';
+        const cls  = isOk ? 'code-ok' : isWarn ? 'code-warn' : 'code-err';
+        if (isOk) ok++;
         rows += `<tr>
-          <td style="color:#808080;">${i + 1}</td>
-          <td><span class="status-icon">${icon}</span>${escHtml(site.name)}</td>
-          <td class="url-cell"><a href="${escHtml(site.url)}" target="_blank" rel="noopener">${escHtml(site.url)}</a></td>
-          <td class="${codeClass}">${s || '—'}</td>
-          <td class="ms-cell">${msText}</td>
+          <td style="color:#808080">${i + 1}</td>
+          <td><span class="s-icon">${icon}</span>${esc(site.name)}</td>
+          <td class="url-cell"><a href="${esc(site.url)}" target="_blank" rel="noopener">${esc(site.url)}</a></td>
+          <td class="${cls}">${s || '—'}</td>
+          <td class="ms-cell">${site.ms > 0 ? site.ms + ' ms' : '—'}</td>
         </tr>`;
       });
 
-      tbody.innerHTML = rows;
-      table.style.display  = 'table';
+      document.getElementById('result-body').innerHTML = rows;
+      table.style.display   = 'table';
       summary.style.display = 'block';
-      summary.innerHTML = `총 <span>${data.sites.length}</span>개 사이트 · 정상 <span style="color:#4ec94e">${okCount}</span>개 · 오류 <span style="color:#e06c75">${data.sites.length - okCount}</span>개`;
+      const err = data.sites.length - ok;
+      summary.innerHTML =
+        `총 <span>${data.sites.length}</span>개 사이트 · ` +
+        `정상 <span style="color:#4ec94e">${ok}</span>개 · ` +
+        `오류 <span style="color:#e06c75">${err}</span>개`;
     }
 
-    function escHtml(str) {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+    /* ── 이슈 목록 ──────────────────────────── */
+    function renderIncidents(c) {
+      if (!c || !c.incidents || !c.incidents.length) return;
+      const wrap = document.getElementById('incidents-wrap');
+      const list = document.getElementById('incidents-list');
+      let html = '';
+      c.incidents.forEach(inc => {
+        if (!inc.date) return;   // _ 접두어 주석 항목 건너뜀
+        html += `<div class="incident">
+          <div class="incident-date">${esc(inc.date)}</div>
+          <div class="incident-title">${esc(inc.title || '')}</div>
+          <div class="incident-body">${esc(inc.body || '')}</div>
+        </div>`;
+      });
+      if (html) {
+        list.innerHTML  = html;
+        wrap.style.display = 'block';
+      }
     }
 
-    function toggleAutoRefresh() {
-      const cb = document.getElementById('auto-refresh');
+    /* ── 자동 새로고침 ──────────────────────── */
+    function toggleAuto() {
+      const cb = document.getElementById('auto-cb');
       if (cb.checked) {
-        autoTimer = setInterval(loadStatus, 60000);
+        autoTimer = setInterval(loadAll, 60000);
       } else {
         clearInterval(autoTimer);
         autoTimer = null;
       }
     }
 
-    loadStatus();
+    loadAll();
   </script>
 </body>
 </html>
