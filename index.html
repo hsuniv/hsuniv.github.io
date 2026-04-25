@@ -39,20 +39,13 @@
     }
     .divider { border: none; border-top: 1px solid #2d2d2d; margin: 2.5rem 0; }
 
-    /* ── 컨트롤 ───────────────────────────── */
-    .meta { color: #6A9955; font-size: 0.82rem; margin-bottom: 0.8rem; }
-    .controls {
-      display: flex; align-items: center; gap: 1rem;
-      margin-bottom: 1.2rem; flex-wrap: wrap;
+    /* ── 섹션 헤더 (제목 + 마지막 체크 시간) ── */
+    .section-header {
+      display: flex; align-items: baseline;
+      justify-content: space-between; margin-bottom: 0.75rem; gap: 1rem;
     }
-    button {
-      background: #2d2d2d; color: #569CD6;
-      border: 1px solid #569CD6; padding: 0.35rem 1rem;
-      border-radius: 4px; cursor: pointer; font-size: 0.85rem;
-      font-family: inherit; transition: background 0.2s;
-    }
-    button:hover { background: #3a3a3a; }
-    .auto-label { color: #808080; font-size: 0.83rem; }
+    .section-header .section-title { margin-bottom: 0; }
+    .meta { color: #6A9955; font-size: 0.78rem; white-space: nowrap; }
 
     /* ── 사이트 테이블 ────────────────────── */
     table { width: 100%; border-collapse: collapse; margin-bottom: 0.8rem; }
@@ -132,14 +125,9 @@
 
   <!-- ② 현재 사이트 상태 테이블 -->
   <section>
-    <div class="section-title">사이트별 상태 — 각 행의 바: 최근 90일</div>
-    <div class="meta" id="last-updated">마지막 체크: —</div>
-    <div class="controls">
-      <button onclick="loadAll()">새로고침</button>
-      <label class="auto-label">
-        <input type="checkbox" id="auto-cb" onchange="toggleAuto()">
-        자동 새로고침 (60초)
-      </label>
+    <div class="section-header">
+      <div class="section-title">사이트별 상태 — 각 행의 바: 최근 90일</div>
+      <div class="meta" id="last-updated">마지막 체크: —</div>
     </div>
     <div id="loading">불러오는 중...</div>
     <div id="error-msg">status.json을 불러올 수 없습니다. GitHub Actions가 아직 실행 전일 수 있습니다.</div>
@@ -190,7 +178,6 @@
 
   <script>
     const BASE = './sitecheck/';
-    let autoTimer = null;
 
     /* 점검 실패 횟수 → 상태 변환 규칙 (횟수 × 10분 = 누적 다운 시간) */
     const RULE_RED    = 6;   // 60분 이상 → 빨강
@@ -360,13 +347,6 @@
       });
       list.innerHTML = html;
       wrap.style.display = 'block';   // 이슈 없어도 규칙·공지 링크 항상 표시
-    }
-
-    /* ── 자동 새로고침 ──────────────────── */
-    function toggleAuto() {
-      const cb = document.getElementById('auto-cb');
-      clearInterval(autoTimer);
-      autoTimer = cb.checked ? setInterval(loadAll, 60000) : null;
     }
 
     loadAll();
