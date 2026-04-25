@@ -14,58 +14,42 @@
       font-family: "Noto Sans KR", "맑은 고딕", "Malgun Gothic", monospace, sans-serif;
       font-size: 0.95rem;
       padding: 2.5rem 1.5rem;
-      max-width: 920px;
+      max-width: 960px;
     }
 
-    /* ── 헤더 ───────────────────────────────── */
+    /* ── 헤더 ─────────────────────────────── */
     h1 { color: #569CD6; font-size: 1.5rem; margin-bottom: 0.2rem; }
     .site-sub { color: #6A9955; font-size: 0.82rem; margin-bottom: 2rem; }
 
-    /* ── 상태 배너 ──────────────────────────── */
+    /* ── 상태 배너 ────────────────────────── */
     .banner {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 1rem 1.4rem;
-      border-radius: 6px;
-      margin-bottom: 2.5rem;
-      font-size: 1rem;
-      font-weight: bold;
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 1rem 1.4rem; border-radius: 6px;
+      margin-bottom: 2.5rem; font-size: 1rem; font-weight: bold;
     }
     .banner-green  { background: rgba(78,201,78,.1);   border-left: 4px solid #4ec94e; color: #4ec94e; }
     .banner-yellow { background: rgba(229,192,123,.1); border-left: 4px solid #e5c07b; color: #e5c07b; }
     .banner-red    { background: rgba(224,108,117,.1); border-left: 4px solid #e06c75; color: #e06c75; }
-    .banner-icon { font-size: 1.25rem; line-height: 1; }
+    .banner-icon   { font-size: 1.25rem; line-height: 1; }
 
-    /* ── 섹션 공통 ──────────────────────────── */
+    /* ── 섹션 공통 ────────────────────────── */
     .section-title {
-      color: #D7BA7D;
-      font-size: 0.78rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.75rem;
+      color: #D7BA7D; font-size: 0.78rem; font-weight: bold;
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem;
     }
     .divider { border: none; border-top: 1px solid #2d2d2d; margin: 2.5rem 0; }
 
-    /* ── 90일 가동 현황 ─────────────────────── */
+    /* ── 전체 90일 바 ─────────────────────── */
     .history-section { margin-bottom: 2.5rem; }
     .history-labels {
-      display: flex;
-      justify-content: space-between;
-      color: #4a4a4a;
-      font-size: 0.76rem;
-      margin-bottom: 0.45rem;
+      display: flex; justify-content: space-between;
+      color: #4a4a4a; font-size: 0.76rem; margin-bottom: 0.45rem;
     }
     .history-wrap { overflow-x: auto; padding-bottom: 4px; }
     .history-bars { display: flex; gap: 3px; min-width: max-content; }
     .bar {
-      width: 8px;
-      height: 32px;
-      border-radius: 2px;
-      flex-shrink: 0;
-      cursor: default;
-      transition: opacity 0.15s;
+      width: 8px; height: 32px; border-radius: 2px;
+      flex-shrink: 0; cursor: default; transition: opacity 0.15s;
     }
     .bar:hover { opacity: 0.65; }
     .bar-green  { background: #4ec94e; }
@@ -73,21 +57,15 @@
     .bar-red    { background: #e06c75; }
     .bar-none   { background: #2a2a2a; }
     .history-legend {
-      display: flex;
-      gap: 1.2rem;
-      margin-top: 0.6rem;
-      font-size: 0.76rem;
-      color: #555;
+      display: flex; gap: 1.4rem; margin-top: 0.65rem;
+      font-size: 0.76rem; color: #555;
     }
     .legend-dot {
-      display: inline-block;
-      width: 10px; height: 10px;
-      border-radius: 2px;
-      margin-right: 0.3rem;
-      vertical-align: middle;
+      display: inline-block; width: 10px; height: 10px;
+      border-radius: 2px; margin-right: 0.3rem; vertical-align: middle;
     }
 
-    /* ── 컨트롤 / 테이블 ────────────────────── */
+    /* ── 컨트롤 ───────────────────────────── */
     .meta { color: #6A9955; font-size: 0.82rem; margin-bottom: 0.8rem; }
     .controls {
       display: flex; align-items: center; gap: 1rem;
@@ -102,21 +80,30 @@
     button:hover { background: #3a3a3a; }
     .auto-label { color: #808080; font-size: 0.83rem; }
 
+    /* ── 사이트 테이블 ────────────────────── */
     table { width: 100%; border-collapse: collapse; margin-bottom: 0.8rem; }
     th {
       background: #252526; color: #D7BA7D;
       text-align: left; padding: 0.55rem 0.8rem;
       border-bottom: 1px solid #3a3a3a; font-weight: bold;
     }
-    td { padding: 0.5rem 0.8rem; border-bottom: 1px solid #2d2d2d; vertical-align: middle; }
+    td { padding: 0.5rem 0.8rem; border-bottom: 1px solid #2d2d2d; vertical-align: top; }
     tr:hover td { background: #252526; }
+    .s-icon { font-size: 1.05rem; margin-right: 0.35rem; }
+    .site-link { color: #d4d4d4; text-decoration: none; }
+    .site-link:hover { color: #569CD6; }
 
-    .s-icon { font-size: 1.05rem; margin-right: 0.4rem; }
+    /* ── 사이트별 미니 상태바 (90일) ─────── */
+    .mini-bars { display: flex; gap: 1px; margin-top: 5px; flex-wrap: nowrap; }
+    .mini-bar {
+      width: 3px; height: 18px; border-radius: 1px;
+      flex-shrink: 0; cursor: default; transition: opacity 0.15s;
+    }
+    .mini-bar:hover { opacity: 0.65; }
+
     .code-ok   { color: #4ec94e; }
     .code-warn { color: #e5c07b; }
     .code-err  { color: #e06c75; }
-    .url-cell a { color: #569CD6; text-decoration: none; font-size: 0.85rem; }
-    .url-cell a:hover { text-decoration: underline; }
     .ms-cell { color: #808080; font-size: 0.85rem; }
 
     #loading { color: #808080; margin: 1.5rem 0; font-size: 0.9rem; }
@@ -124,19 +111,28 @@
     .summary { font-size: 0.85rem; color: #808080; margin-top: 0.4rem; }
     .summary span { color: #D7BA7D; }
 
-    /* ── 주요 이슈 기록 ─────────────────────── */
-    .incidents-section { margin-bottom: 2rem; }
+    /* ── 이슈 기록 ────────────────────────── */
+    .rule-note {
+      background: #252526; border: 1px solid #3a3a3a; border-radius: 4px;
+      padding: 0.65rem 1rem; font-size: 0.8rem; color: #808080;
+      margin-bottom: 1.6rem; line-height: 1.8;
+    }
     .incident {
-      border-left: 3px solid #2d2d2d;
-      padding: 0.8rem 1.2rem;
-      margin-bottom: 1.4rem;
+      border-left: 3px solid #2d2d2d; padding: 0.8rem 1.2rem; margin-bottom: 1.4rem;
     }
     .incident-date  { color: #6A9955; font-size: 0.8rem; margin-bottom: 0.3rem; }
     .incident-title { color: #D7BA7D; font-size: 0.95rem; font-weight: bold; margin-bottom: 0.4rem; }
     .incident-body  { color: #808080; font-size: 0.87rem; line-height: 1.65; }
+    .notice-links {
+      margin-top: 1.5rem; font-size: 0.82rem; color: #555;
+    }
+    .notice-links a { color: #569CD6; text-decoration: none; }
+    .notice-links a:hover { text-decoration: underline; }
 
-    /* ── 푸터 ───────────────────────────────── */
-    footer { color: #3a3a3a; font-size: 0.78rem; margin-top: 2.5rem; }
+    /* ── 푸터 ─────────────────────────────── */
+    footer { color: #3a3a3a; font-size: 0.78rem; margin-top: 2.5rem; line-height: 1.8; }
+    footer a { color: #3a3a3a; text-decoration: none; }
+    footer a:hover { color: #808080; }
   </style>
 </head>
 <body>
@@ -144,19 +140,16 @@
   <h1>한성대학교 서비스 상태</h1>
   <div class="site-sub">hansung.ac.kr 주요 웹서비스 모니터링</div>
 
-  <!-- ① 상태 배너 -->
+  <!-- ① 상태 배너 (comment.json 제어) -->
   <div class="banner banner-green" id="banner">
     <span class="banner-icon" id="banner-icon">🟢</span>
     <span id="banner-msg">모든 시스템이 정상 운영 중입니다.</span>
   </div>
 
-  <!-- ② 90일 가동 현황 -->
+  <!-- ② 전체 90일 가동 현황 -->
   <section class="history-section">
-    <div class="section-title">최근 90일 가동 현황</div>
-    <div class="history-labels">
-      <span>90일 전</span>
-      <span>오늘</span>
-    </div>
+    <div class="section-title">전체 가동 현황 — 최근 90일</div>
+    <div class="history-labels"><span>90일 전</span><span>오늘</span></div>
     <div class="history-wrap">
       <div class="history-bars" id="history-bars"></div>
     </div>
@@ -168,9 +161,9 @@
     </div>
   </section>
 
-  <!-- ③ 현재 사이트 상태 -->
+  <!-- ③ 현재 사이트 상태 테이블 -->
   <section>
-    <div class="section-title">현재 사이트 상태</div>
+    <div class="section-title">사이트별 상태 — 각 행의 바: 최근 90일</div>
     <div class="meta" id="last-updated">마지막 체크: —</div>
     <div class="controls">
       <button onclick="loadAll()">새로고침</button>
@@ -184,11 +177,10 @@
     <table id="result-table" style="display:none;">
       <thead>
         <tr>
-          <th style="width:2.5rem;">#</th>
-          <th>사이트명</th>
-          <th>URL</th>
-          <th style="width:6rem;">상태코드</th>
-          <th style="width:6rem;">응답(ms)</th>
+          <th style="width:2.2rem;">#</th>
+          <th>사이트명 / 90일 이력</th>
+          <th style="width:5.5rem;">상태코드</th>
+          <th style="width:5.5rem;">응답(ms)</th>
         </tr>
       </thead>
       <tbody id="result-body"></tbody>
@@ -199,17 +191,47 @@
   <!-- ④ 주요 이슈 기록 -->
   <div id="incidents-wrap" style="display:none;">
     <hr class="divider">
-    <section class="incidents-section">
+    <section>
       <div class="section-title">주요 이슈 기록</div>
+
+      <!-- 측정 기준 설명 -->
+      <div class="rule-note">
+        📡 점검 주기: <strong>10분</strong> 간격 자동 점검<br>
+        🔴 <strong>빨강</strong>: 하루 누적 다운 <strong>1시간 이상</strong> (6회 이상 점검 실패)<br>
+        🟡 <strong>노랑</strong>: 하루 누적 다운 <strong>30분 이상</strong> (3회 이상 점검 실패)<br>
+        🟢 <strong>초록</strong>: 30분 미만 (정상 운영)
+      </div>
+
       <div id="incidents-list"></div>
+
+      <!-- 기타 공지 링크 -->
+      <div class="notice-links">
+        기타 작업 공지 참고:&nbsp;
+        <a href="https://www.hansung.ac.kr/hansung/6172/subview.do" target="_blank" rel="noopener">한성대학교 공지사항</a>
+        &nbsp;/&nbsp;
+        <a href="https://hansung.ac.kr/info/4016/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGaW5mbyUyRjE5MjYlMkZhcnRjbExpc3QuZG8lM0Y%3D" target="_blank" rel="noopener">디지털정보처 공지사항</a>
+      </div>
     </section>
   </div>
 
-  <footer>hsuniv.github.io · IT인프라팀</footer>
+  <footer>
+    한성대학교 디지털정보처 IT인프라팀<br>
+    <a href="https://hsuniv.github.io">hsuniv.github.io</a>
+  </footer>
 
   <script>
     const BASE = './sitecheck/';
     let autoTimer = null;
+
+    /* 점검 실패 횟수 → 상태 변환 규칙 (횟수 × 10분 = 누적 다운 시간) */
+    const RULE_RED    = 6;   // 60분 이상 → 빨강
+    const RULE_YELLOW = 3;   // 30분 이상 → 노랑
+
+    function countToStatus(n) {
+      if (n >= RULE_RED)    return 'red';
+      if (n >= RULE_YELLOW) return 'yellow';
+      return 'green';
+    }
 
     function esc(s) {
       return String(s)
@@ -222,66 +244,96 @@
         .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
     }
 
+    /* history.json → { "YYYY-MM-DD": { siteName: failCount, ... }, ... } */
+    function buildDayMap(history) {
+      const map = {};
+      if (history && history.days) {
+        history.days.forEach(d => { map[d.date] = d.sites || {}; });
+      }
+      return map;
+    }
+
+    /* 특정 날의 사이트 상태 */
+    function siteStatusOnDay(dayMap, date, siteName) {
+      if (!(date in dayMap)) return 'none';       // 기록 없음 (데이터 미존재 날)
+      return countToStatus(dayMap[date][siteName] || 0);
+    }
+
+    /* 특정 날의 전체 상태 (가장 나쁜 사이트 기준) */
+    function overallStatusOnDay(dayMap, date) {
+      if (!(date in dayMap)) return 'none';
+      const counts = Object.values(dayMap[date]);
+      if (counts.some(c => c >= RULE_RED))    return 'red';
+      if (counts.some(c => c >= RULE_YELLOW)) return 'yellow';
+      return 'green';
+    }
+
+    /* 날짜 배열 생성 (89일 전 ~ 오늘) */
+    function last90Dates() {
+      const arr = [];
+      for (let ago = 89; ago >= 0; ago--) {
+        const d = new Date();
+        d.setDate(d.getDate() - ago);
+        arr.push(d.toISOString().slice(0, 10));
+      }
+      return arr;
+    }
+
+    /* ── 전체 로드 ──────────────────────── */
     function loadAll() {
       Promise.allSettled([
         get('status.json'),
         get('history.json'),
         get('comment.json'),
       ]).then(([sr, hr, cr]) => {
-        renderBanner (cr.status === 'fulfilled' ? cr.value : null);
-        renderHistory(hr.status === 'fulfilled' ? hr.value : null);
-        renderTable  (sr.status === 'fulfilled' ? sr.value : null);
-        renderIncidents(cr.status === 'fulfilled' ? cr.value : null);
+        const status  = sr.status === 'fulfilled' ? sr.value : null;
+        const history = hr.status === 'fulfilled' ? hr.value : null;
+        const comment = cr.status === 'fulfilled' ? cr.value : null;
+        const dayMap  = buildDayMap(history);
+
+        renderBanner(comment);
+        renderOverallBars(dayMap);
+        renderTable(status, dayMap);
+        renderIncidents(comment);
       });
     }
 
-    /* ── 배너 ──────────────────────────────── */
+    /* ── 배너 ───────────────────────────── */
     function renderBanner(c) {
       if (!c) return;
+      const s = (c.status || 'green').toLowerCase();
       const defaults = {
         green:  '모든 시스템이 정상 운영 중입니다.',
         yellow: '일부 시스템에 장애가 발생하고 있습니다.',
         red:    '서비스 장애가 발생하고 있습니다.',
       };
-      const icons = { green: '🟢', yellow: '🟡', red: '🔴' };
-      const s = (c.status || 'green').toLowerCase();
+      const icons = { green:'🟢', yellow:'🟡', red:'🔴' };
       document.getElementById('banner').className = 'banner banner-' + s;
       document.getElementById('banner-icon').textContent = icons[s] || '🟢';
       document.getElementById('banner-msg').textContent  =
         (c.message && c.message.trim()) ? c.message.trim() : (defaults[s] || defaults.green);
     }
 
-    /* ── 90일 바 ────────────────────────────── */
-    function renderHistory(h) {
-      const container = document.getElementById('history-bars');
-      const dayMap = {};
-      if (h && h.days) h.days.forEach(d => { dayMap[d.date] = d.status; });
-
-      const labels = { green:'정상', yellow:'일부 장애', red:'서비스 중단', none:'데이터 없음' };
+    /* ── 전체 90일 바 ───────────────────── */
+    function renderOverallBars(dayMap) {
+      const LABELS = { green:'정상', yellow:'일부 장애', red:'서비스 중단', none:'데이터 없음' };
       let html = '';
-      for (let ago = 89; ago >= 0; ago--) {
-        const d = new Date();
-        d.setDate(d.getDate() - ago);
-        const date   = d.toISOString().slice(0, 10);
-        const status = dayMap[date] || 'none';
-        html += `<div class="bar bar-${status}" title="${date} · ${labels[status]}"></div>`;
-      }
-      container.innerHTML = html;
+      last90Dates().forEach(date => {
+        const s = overallStatusOnDay(dayMap, date);
+        html += `<div class="bar bar-${s}" title="${date} · ${LABELS[s]}"></div>`;
+      });
+      document.getElementById('history-bars').innerHTML = html;
     }
 
-    /* ── 사이트 테이블 ──────────────────────── */
-    function renderTable(data) {
+    /* ── 사이트 테이블 (사이트별 미니바 포함) ── */
+    function renderTable(data, dayMap) {
       const loading = document.getElementById('loading');
       const errMsg  = document.getElementById('error-msg');
       const table   = document.getElementById('result-table');
       const summary = document.getElementById('summary');
-
       loading.style.display = 'none';
 
-      if (!data) {
-        errMsg.style.display = 'block';
-        return;
-      }
+      if (!data) { errMsg.style.display = 'block'; return; }
       errMsg.style.display = 'none';
       document.getElementById('last-updated').textContent =
         '마지막 체크: ' + (data.updated || '정보 없음');
@@ -289,24 +341,41 @@
       if (!data.sites || !data.sites.length) {
         table.style.display = 'table';
         document.getElementById('result-body').innerHTML =
-          '<tr><td colspan="5" style="color:#808080;padding:1rem;">데이터가 없습니다.</td></tr>';
+          '<tr><td colspan="4" style="color:#808080;padding:1rem;">데이터가 없습니다.</td></tr>';
         return;
       }
 
+      const dates = last90Dates();
+      const MINI_LABELS = { green:'정상', yellow:'일부 장애', red:'서비스 중단', none:'데이터 없음' };
       let ok = 0, rows = '';
+
       data.sites.forEach((site, i) => {
         const s      = site.status;
         const isOk   = s >= 200 && s < 300;
         const isWarn = s >= 300 && s < 500;
-        const icon = isOk ? '🟢' : isWarn ? '🟡' : '🔴';
-        const cls  = isOk ? 'code-ok' : isWarn ? 'code-warn' : 'code-err';
+        const icon   = isOk ? '🟢' : isWarn ? '🟡' : '🔴';
+        const cls    = isOk ? 'code-ok' : isWarn ? 'code-warn' : 'code-err';
         if (isOk) ok++;
+
+        /* 사이트별 미니 90일 바 */
+        let miniBars = '';
+        dates.forEach(date => {
+          const st    = siteStatusOnDay(dayMap, date, site.name);
+          const count = (date in dayMap) ? (dayMap[date][site.name] || 0) : null;
+          const tip   = count !== null
+            ? `${date} · 다운 ${count * 10}분`
+            : `${date} · ${MINI_LABELS[st]}`;
+          miniBars += `<div class="mini-bar bar-${st}" title="${tip}"></div>`;
+        });
+
         rows += `<tr>
-          <td style="color:#808080">${i + 1}</td>
-          <td><span class="s-icon">${icon}</span>${esc(site.name)}</td>
-          <td class="url-cell"><a href="${esc(site.url)}" target="_blank" rel="noopener">${esc(site.url)}</a></td>
-          <td class="${cls}">${s || '—'}</td>
-          <td class="ms-cell">${site.ms > 0 ? site.ms + ' ms' : '—'}</td>
+          <td style="color:#808080;vertical-align:middle">${i + 1}</td>
+          <td>
+            <div><span class="s-icon">${icon}</span><a class="site-link" href="${esc(site.url)}" target="_blank" rel="noopener">${esc(site.name)}</a></div>
+            <div class="mini-bars">${miniBars}</div>
+          </td>
+          <td class="${cls}" style="vertical-align:middle">${s || '—'}</td>
+          <td class="ms-cell" style="vertical-align:middle">${site.ms > 0 ? site.ms + ' ms' : '—'}</td>
         </tr>`;
       });
 
@@ -320,35 +389,29 @@
         `오류 <span style="color:#e06c75">${err}</span>개`;
     }
 
-    /* ── 이슈 목록 ──────────────────────────── */
+    /* ── 이슈 기록 ──────────────────────── */
     function renderIncidents(c) {
-      if (!c || !c.incidents || !c.incidents.length) return;
+      if (!c) return;
       const wrap = document.getElementById('incidents-wrap');
       const list = document.getElementById('incidents-list');
       let html = '';
-      c.incidents.forEach(inc => {
-        if (!inc.date) return;   // _ 접두어 주석 항목 건너뜀
+      (c.incidents || []).forEach(inc => {
+        if (!inc.date) return;
         html += `<div class="incident">
           <div class="incident-date">${esc(inc.date)}</div>
           <div class="incident-title">${esc(inc.title || '')}</div>
           <div class="incident-body">${esc(inc.body || '')}</div>
         </div>`;
       });
-      if (html) {
-        list.innerHTML  = html;
-        wrap.style.display = 'block';
-      }
+      list.innerHTML = html;
+      wrap.style.display = 'block';   // 이슈 없어도 규칙·공지 링크 항상 표시
     }
 
-    /* ── 자동 새로고침 ──────────────────────── */
+    /* ── 자동 새로고침 ──────────────────── */
     function toggleAuto() {
       const cb = document.getElementById('auto-cb');
-      if (cb.checked) {
-        autoTimer = setInterval(loadAll, 60000);
-      } else {
-        clearInterval(autoTimer);
-        autoTimer = null;
-      }
+      clearInterval(autoTimer);
+      autoTimer = cb.checked ? setInterval(loadAll, 60000) : null;
     }
 
     loadAll();
