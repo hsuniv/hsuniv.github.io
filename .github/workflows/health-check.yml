@@ -9,7 +9,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     permissions:
-      contents: write          # status.json / history.json 커밋을 위한 쓰기 권한
+      contents: write
 
     steps:
       - name: Checkout
@@ -18,7 +18,7 @@ jobs:
       - name: Run health check
         run: |
           python3 << 'EOF'
-          import json, subprocess, time, datetime
+          import json, subprocess, datetime
 
           with open('sitecheck/sites.json', encoding='utf-8') as f:
               sites = json.load(f)['sites']
@@ -27,14 +27,10 @@ jobs:
           for site in sites:
               try:
                   proc = subprocess.run(
-                      [
-                          'curl', '-o', '/dev/null', '-s',
-                          '-w', '%{http_code} %{time_total}',
-                          '-L',                    # 리다이렉트 따라가기
-                          '--max-time', '15',
-                          '--connect-timeout', '10',
-                          site['url']
-                      ],
+                      ['curl', '-o', '/dev/null', '-s',
+                       '-w', '%{http_code} %{time_total}',
+                       '-L', '--max-time', '15', '--connect-timeout', '10',
+                       site['url']],
                       capture_output=True, text=True, timeout=20
                   )
                   parts = proc.stdout.strip().split()
@@ -43,47 +39,40 @@ jobs:
               except Exception:
                   status = 0
                   ms     = 0
-              results.append({
-                  'name': site['name'],
-                  'url':  site['url'],
-                  'status': status,
-                  'ms':     ms
-              })
+              results.append({'name': site['name'], 'url': site['url'], 'status': status, 'ms': ms})
 
           kst   = datetime.timezone(datetime.timedelta(hours=9))
           now   = datetime.datetime.now(kst)
           today = now.strftime('%Y-%m-%d')
 
           # status.json 저장
-          output = {'updated': now.strftime('%Y-%m-%d %H:%M KST'), 'sites': results}
           with open('sitecheck/status.json', 'w', encoding='utf-8') as f:
-              json.dump(output, f, ensure_ascii=False, indent=2)
+              json.dump({'updated': now.strftime('%Y-%m-%d %H:%M KST'), 'sites': results},
+                        f, ensure_ascii=False, indent=2)
 
-          # 오늘 전체 상태 판정 (하루 중 가장 나쁜 상태를 유지)
-          STATUS_RANK = {'green': 0, 'yellow': 1, 'red': 2}
-          if any(r['status'] == 0 or r['status'] >= 500 for r in results):
-              today_status = 'red'
-          elif any(300 <= r['status'] < 500 for r in results):
-              today_status = 'yellow'
-          else:
-              today_status = 'green'
+          # 이번 체크에서 실패한 사이트 목록
+          failed = {r['name'] for r in results if not (200 <= r['status'] < 300)}
 
-          # history.json 업데이트 (최대 90일 유지)
+          # history.json 업데이트
+          # 구조: days[].sites = { "사이트명": 다운_횟수 }
+          # 다운_횟수 × 10분 = 누적 다운 시간
           try:
               with open('sitecheck/history.json', encoding='utf-8') as f:
                   history = json.load(f)
           except Exception:
               history = {'days': []}
 
-          days    = history.get('days', [])
-          existing = next((d for d in days if d['date'] == today), None)
+          days        = history.get('days', [])
+          today_entry = next((d for d in days if d['date'] == today), None)
 
-          if existing:
-              # 하루 중 더 나쁜 상태가 나오면 덮어쓴다
-              if STATUS_RANK.get(today_status, 0) > STATUS_RANK.get(existing['status'], 0):
-                  existing['status'] = today_status
-          else:
-              days.append({'date': today, 'status': today_status})
+          if today_entry is None:
+              today_entry = {'date': today, 'sites': {}}
+              days.append(today_entry)
+
+          # 실패한 사이트의 횟수를 1씩 누적
+          site_counts = today_entry.setdefault('sites', {})
+          for name in failed:
+              site_counts[name] = site_counts.get(name, 0) + 1
 
           days.sort(key=lambda d: d['date'])
           history['days'] = days[-90:]   # 90일 초과분 자동 삭제
@@ -92,7 +81,9 @@ jobs:
               json.dump(history, f, ensure_ascii=False, indent=2)
 
           ok = sum(1 for r in results if 200 <= r['status'] < 300)
-          print(f"완료: 총 {len(results)}개 사이트, 정상 {ok}개, 오류 {len(results)-ok}개 / 오늘 상태: {today_status}")
+          print(f"완료: {len(results)}개 사이트 / 정상 {ok}개 / 오류 {len(results)-ok}개")
+          if failed:
+              print(f"실패 사이트: {', '.join(failed)}")
           EOF
 
       - name: Commit and push results
