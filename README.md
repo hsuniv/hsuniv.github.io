@@ -3,7 +3,7 @@
 한성대학교 IT인프라팀 GitHub Pages.  
 현재 기능: 주요 웹서비스 상태 자동 모니터링 대시보드.
 
-**대시보드 주소:** https://hsuniv.github.io/sitecheck
+**대시보드 주소:** https://hsuniv.github.io
 
 ---
 
