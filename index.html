@@ -59,7 +59,7 @@
     .s-icon { font-size: 1.05rem; margin-right: 0.35rem; }
     .site-link { color: #d4d4d4; text-decoration: none; }
     .site-link:hover { color: #569CD6; }
-    .site-url { font-size: 0.78rem; color: #4a4a4a; margin-top: 2px; margin-left: 1.6rem; }
+    .site-url { font-size: 0.78rem; color: #4a4a4a; margin-top: 2px; margin-left: 1.6rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .site-url a { color: #4a4a4a; text-decoration: none; }
     .site-url a:hover { color: #569CD6; text-decoration: underline; }
 
@@ -71,7 +71,7 @@
 
     /* ── 사이트별 미니 상태바 (90일) ─────── */
     .site-cell { display: flex; align-items: center; gap: 0.75rem; }
-    .site-info { flex-shrink: 0; }
+    .site-info { flex-shrink: 0; width: 200px; overflow: hidden; }
     .mini-bars-wrap { flex: 1; min-width: 0; overflow-x: auto; }
     .mini-bars { display: flex; gap: 1px; flex-wrap: nowrap; min-width: max-content; }
     .mini-bar {
