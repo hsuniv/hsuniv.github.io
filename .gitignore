@@ -1,1 +1,9 @@
+# macOS
 .DS_Store
+
+# Windows
+Thumbs.db
+
+# 임시 파일
+*.log
+.tmp/
