@@ -70,13 +70,21 @@
     .bar-none   { background: #2a2a2a; }
 
     /* ── 사이트별 미니 상태바 (90일) ─────── */
-    .mini-bars-wrap { overflow-x: auto; margin-top: 5px; }
+    .site-cell { display: flex; align-items: center; gap: 0.75rem; }
+    .site-info { flex-shrink: 0; }
+    .mini-bars-wrap { flex: 1; min-width: 0; overflow-x: auto; }
     .mini-bars { display: flex; gap: 1px; flex-wrap: nowrap; min-width: max-content; }
     .mini-bar {
       width: 3px; height: 18px; border-radius: 1px;
       flex-shrink: 0; cursor: default; transition: opacity 0.15s;
     }
     .mini-bar:hover { opacity: 0.65; }
+
+    @media (max-width: 640px) {
+      .site-cell { flex-wrap: wrap; }
+      .mini-bars-wrap { width: 100%; overflow-x: visible; }
+      .mini-bars { display: grid; grid-template-columns: repeat(45, 3px); min-width: 0; }
+    }
 
     .code-ok   { color: #4ec94e; }
     .code-warn { color: #e5c07b; }
@@ -153,10 +161,10 @@
 
       <!-- 측정 기준 설명 -->
       <div class="rule-note">
-        📡 점검 주기: <strong>10분</strong> 간격 자동 점검<br>
-        🔴 <strong>빨강</strong>: 하루 누적 다운 <strong>1시간 이상</strong> (6회 이상 점검 실패)<br>
-        🟡 <strong>노랑</strong>: 하루 누적 다운 <strong>30분 이상</strong> (3회 이상 점검 실패)<br>
-        🟢 <strong>초록</strong>: 30분 미만 (정상 운영)
+        📡 점검 주기: <strong>30분</strong> 간격 자동 점검<br>
+        🔴 <strong>빨강</strong>: 하루 누적 다운 <strong>2시간 30분 이상</strong> (5회 이상 점검 실패)<br>
+        🟡 <strong>노랑</strong>: 하루 누적 다운 <strong>1시간 30분 이상</strong> (3회 이상 점검 실패)<br>
+        🟢 <strong>초록</strong>: 1시간 30분 미만 (정상 운영)
       </div>
 
       <div id="incidents-list"></div>
@@ -180,8 +188,8 @@
     const BASE = './sitecheck/';
 
     /* 점검 실패 횟수 → 상태 변환 규칙 (횟수 × 10분 = 누적 다운 시간) */
-    const RULE_RED    = 6;   // 60분 이상 → 빨강
-    const RULE_YELLOW = 3;   // 30분 이상 → 노랑
+    const RULE_RED    = 5;   // 5회(150분) 이상 → 빨강
+    const RULE_YELLOW = 3;   // 3회(90분) 이상 → 노랑
 
     function countToStatus(n) {
       if (n >= RULE_RED)    return 'red';
@@ -298,7 +306,7 @@
           const st    = siteStatusOnDay(dayMap, date, site.name);
           const count = (date in dayMap) ? (dayMap[date][site.name] || 0) : null;
           const tip   = count !== null
-            ? `${date} · 다운 ${count * 10}분`
+            ? `${date} · 다운 ${count * 30}분`
             : `${date} · ${MINI_LABELS[st]}`;
           miniBars += `<div class="mini-bar bar-${st}" title="${tip}"></div>`;
         });
@@ -306,9 +314,13 @@
         rows += `<tr>
           <td style="color:#808080;vertical-align:middle">${i + 1}</td>
           <td>
-            <div><span class="s-icon">${icon}</span><a class="site-link" href="${esc(site.url)}" target="_blank" rel="noopener">${esc(site.name)}</a></div>
-            <div class="site-url"><a href="${esc(site.url)}" target="_blank" rel="noopener">${esc(site.url)}</a></div>
-            <div class="mini-bars-wrap"><div class="mini-bars" data-scroll-right="1">${miniBars}</div></div>
+            <div class="site-cell">
+              <div class="site-info">
+                <div><span class="s-icon">${icon}</span><a class="site-link" href="${esc(site.url)}" target="_blank" rel="noopener">${esc(site.name)}</a></div>
+                <div class="site-url"><a href="${esc(site.url)}" target="_blank" rel="noopener">${esc(site.url)}</a></div>
+              </div>
+              <div class="mini-bars-wrap"><div class="mini-bars">${miniBars}</div></div>
+            </div>
           </td>
           <td class="${cls}" style="vertical-align:middle">${s || '—'}</td>
           <td class="ms-cell" style="vertical-align:middle">${site.ms > 0 ? site.ms + ' ms' : '—'}</td>
