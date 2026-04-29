@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>월요일의 보안부기 · 한성 AX 프론티어 챌린지 2025</title>
+<meta name="description" content="보안은 어렵지만 보안부기는 귀엽지. Claude AI가 매주 월요일 09시 한성대 교직원에게 알기 쉬운 보안 브리핑을 자동 발송하는 Zero-Touch 시스템." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="components-1.jsx"></script>
+<script type="text/babel" src="components-2.jsx"></script>
+<script type="text/babel" src="components-3.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+function App() {
+  const [theme, setTheme] = useState("light");
+  const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  window.useReveal();
+
+  return (
+    <>
+      <window.TopNav onSubscribe={() => setModalOpen(true)} theme={theme} setTheme={setTheme} />
+      <main>
+        <window.Hero onSubscribe={() => setModalOpen(true)} />
+        <window.Problem />
+        <window.Solution />
+        <window.NewsletterPreview />
+        <window.LiveDemo />
+        <window.Pipeline />
+        <window.TechStack />
+        <window.Effects />
+        <window.Roadmap />
+        <window.Team />
+        <window.FAQ />
+        <window.FinalCTA onSubscribe={() => setModalOpen(true)} />
+      </main>
+      <window.Footer />
+      <window.SubscribeModal open={modalOpen} onClose={() => setModalOpen(false)} />
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
