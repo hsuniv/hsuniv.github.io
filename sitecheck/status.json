@@ -1,143 +1,143 @@
 {
-  "updated": "2026-06-10 23:20 KST",
+  "updated": "2026-06-11 02:41 KST",
   "sites": [
     {
       "name": "메인홈",
       "url": "http://www.hansung.ac.kr",
       "status": 200,
-      "ms": 1810
+      "ms": 1692
     },
     {
       "name": "종합정보시스템",
       "url": "https://info.hansung.ac.kr",
       "status": 200,
-      "ms": 1152
+      "ms": 877
     },
     {
       "name": "그룹웨어",
       "url": "https://intra.hansung.ac.kr",
       "status": 200,
-      "ms": 7255
+      "ms": 3113
     },
     {
       "name": "학술정보관",
       "url": "http://hsel.hansung.ac.kr",
       "status": 200,
-      "ms": 6239
+      "ms": 1875
     },
     {
       "name": "한성웹메일",
       "url": "https://mail.hansung.ac.kr",
       "status": 200,
-      "ms": 977
+      "ms": 877
     },
     {
       "name": "학습관리시스템LMS",
       "url": "http://learn.hansung.ac.kr",
       "status": 200,
-      "ms": 2469
+      "ms": 1854
     },
     {
       "name": "입학",
       "url": "http://enter.hansung.ac.kr",
       "status": 200,
-      "ms": 1722
+      "ms": 1225
     },
     {
       "name": "웹하드",
       "url": "https://idisk.hansung.ac.kr",
       "status": 200,
-      "ms": 1696
+      "ms": 1355
     },
     {
       "name": "규정관리시스템",
       "url": "http://rule.hansung.ac.kr",
       "status": 200,
-      "ms": 1657
+      "ms": 1934
     },
     {
       "name": "스마트자기관리(포털)",
       "url": "http://hsportal.hansung.ac.kr",
       "status": 200,
-      "ms": 5088
+      "ms": 1310
     },
     {
       "name": "사고와표현",
       "url": "http://writingcenter.hansung.ac.kr",
       "status": 200,
-      "ms": 1531
+      "ms": 1438
     },
     {
       "name": "학술정보관 e-Book",
       "url": "https://ebook.hansung.ac.kr",
       "status": 200,
-      "ms": 3906
+      "ms": 3761
     },
     {
       "name": "학술정보관 상상독서",
       "url": "https://book.hansung.ac.kr",
       "status": 200,
-      "ms": 1464
+      "ms": 1372
     },
     {
       "name": "학술oak(dspace)",
       "url": "http://dspace.hansung.ac.kr/",
       "status": 200,
-      "ms": 2786
+      "ms": 3489
     },
     {
       "name": "연구업적(KRI)",
       "url": "https://research.hansung.ac.kr",
       "status": 200,
-      "ms": 976
+      "ms": 874
     },
     {
       "name": "산단연구지원시스템",
       "url": "https://rndb.hansung.ac.kr",
       "status": 200,
-      "ms": 1067
+      "ms": 867
     },
     {
       "name": "기숙사",
       "url": "http://dorm.hansung.ac.kr",
       "status": 200,
-      "ms": 1620
+      "ms": 1400
     },
     {
       "name": "채용",
       "url": "http://recruit.hansung.ac.kr",
       "status": 200,
-      "ms": 5851
+      "ms": 1261
     },
     {
       "name": "캡스톤",
       "url": "http://capstone.hansung.ac.kr",
       "status": 200,
-      "ms": 1809
+      "ms": 1594
     },
     {
       "name": "현장실습",
       "url": "http://coop.hansung.ac.kr",
       "status": 200,
-      "ms": 1779
+      "ms": 1586
     },
     {
       "name": "한성콘텐츠디자인칼리지",
       "url": "https://edulms.hansung.ac.kr",
       "status": 200,
-      "ms": 984
+      "ms": 893
     },
     {
       "name": "한국어과정학사관리",
       "url": "http://koreandev.hansung.ac.kr/",
       "status": 200,
-      "ms": 1760
+      "ms": 1632
     },
     {
       "name": "연말정산",
       "url": "http://tax.hansung.ac.kr/",
       "status": 200,
-      "ms": 590
+      "ms": 534
     }
   ]
 }
